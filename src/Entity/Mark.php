@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\MarkRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=MarkRepository::class)
+ * @ApiResource(attributes={"pagination_enabled"=true, "pagination_items_per_page"=10})
  */
 class Mark
 {
