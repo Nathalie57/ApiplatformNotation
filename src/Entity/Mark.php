@@ -5,10 +5,20 @@ namespace App\Entity;
 use App\Repository\MarkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=MarkRepository::class)
- * @ApiResource(attributes={"pagination_enabled"=true, "pagination_items_per_page"=10})
+ * @ApiResource(
+ *  attributes={
+ *      "pagination_enabled"=true, 
+ *      "pagination_items_per_page"=10
+ *  },
+ *  normalizationContext={
+ *      "groups"={"marks_read"}
+ *  }
+ * )
+ * 
  */
 class Mark
 {
@@ -16,21 +26,25 @@ class Mark
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"marks_read", "students_read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
+     * @Groups({"marks_read", "students_read"})
      */
     private $value;
 
     /**
      * @ORM\Column(type="string", length=32)
+     * @Groups({"marks_read", "students_read"})
      */
     private $subject;
 
     /**
      * @ORM\ManyToOne(targetEntity=Student::class, inversedBy="marks")
+     * @Groups({"marks_read"})
      */
     private $student;
 
@@ -39,12 +53,12 @@ class Mark
         return $this->id;
     }
 
-    public function getValue(): ?int
+    public function getValue(): ?float
     {
         return $this->value;
     }
 
-    public function setValue(int $value): self
+    public function setValue(float $value): self
     {
         $this->value = $value;
 
