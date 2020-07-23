@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=StudentRepository::class)
@@ -17,7 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  itemOperations={"GET", "DELETE", "PATCH"},
  *  normalizationContext={
  *      "groups"={"students_read"}
- *  }
+ *  },
+ * denormalizationContext={"disabled_type_enforcement"=true}
  * )
  */
 class Student
@@ -33,18 +35,27 @@ class Student
     /**
      * @ORM\Column(type="string", length=64)
      * @Groups({"students_read", "marks_read"})
+     * @Assert\NotBlank(message="Le prénom de l'élève est obligatoire !")
+     * @Assert\Length(min=2, minMessage="Le prénom doit faire au moins deux caractères !")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=64)
      * @Groups({"students_read", "marks_read"})
+     * @Assert\NotBlank(message="Le nom de l'élève est obligatoire !")
+     * @Assert\Length(min=2, minMessage="Le nom doit faire au moins deux caractères !")
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"students_read", "marks_read"})
+     * @Assert\NotBlank(message="Le date de naissance de l'élève est obligatoire !")
+     * @Assert\Type(
+     * type = "\DateTime",
+     * message = "La date renseignée doit être au format YYYY-MM-DD !"
+     * )
      */
     private $birthday;
 
@@ -94,7 +105,7 @@ class Student
         return $this->birthday;
     }
 
-    public function setBirthday(\DateTimeInterface $birthday): self
+    public function setBirthday($birthday): self
     {
         $this->birthday = $birthday;
 

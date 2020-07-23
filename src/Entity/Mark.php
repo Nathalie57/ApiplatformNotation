@@ -6,6 +6,7 @@ use App\Repository\MarkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MarkRepository::class)
@@ -40,18 +41,23 @@ class Mark
     /**
      * @ORM\Column(type="float")
      * @Groups({"marks_read", "students_read", "marks_subresource"})
+     * @Assert\NotBlank(message="La note est obligatoire !")
+     * @Assert\Range(min=0, max=20, notInRangeMessage="La note doit être comprise entre 0 et 20 !")
      */
     private $value;
 
     /**
      * @ORM\Column(type="string", length=32)
      * @Groups({"marks_read", "students_read", "marks_subresource"})
+     * @Assert\NotBlank(message="La matière est obligatoire !")
+     * @Assert\Length(min=5, minMessage="Le matière doit faire au moins cinq caractères !")
      */
     private $subject;
 
     /**
      * @ORM\ManyToOne(targetEntity=Student::class, inversedBy="marks")
      * @Groups({"marks_read"})
+     * @Assert\NotBlank(message="L'élève doit obligatoirement être renseigné !")
      */
     private $student;
 
