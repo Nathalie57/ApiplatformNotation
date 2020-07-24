@@ -10,12 +10,19 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Mark;
 
 /**
  * @ORM\Entity(repositoryClass=StudentRepository::class)
  * @ApiResource(
  *  collectionOperations={"GET", "POST"},
- *  itemOperations={"GET", "DELETE", "PATCH"},
+ *  itemOperations={"GET", "DELETE", "PATCH",
+ *      "average"={
+ *          "method"="get", 
+ *          "path"="/students/{id}/average",
+ *          "controller"="App\Controller\AverageStudentController"
+ *      }
+ *  },
  *  normalizationContext={
  *      "groups"={"students_read"}
  *  },
@@ -69,6 +76,35 @@ class Student
     public function __construct()
     {
         $this->marks = new ArrayCollection();
+    }
+
+    /**
+     * Calculate the average of a student
+     *
+     * @return float
+     * 
+     */
+    public function getSumMarks(): float
+    {
+        return array_reduce($this->marks->toArray(), function ($total, $mark) {
+            return $total + $mark->getValue();
+        }, 0);
+    }
+
+    /**
+     * @return int
+     * 
+     */
+    public function getNumberMarks(): int{
+        return count($this->marks);
+    }
+
+    /**
+     * @return float
+     * @Groups({"students_read"})
+     */
+    public function getAverageStudent(): float{
+        return $this->getSumMarks()/$this->getNumberMarks();
     }
 
     public function getId(): ?int
