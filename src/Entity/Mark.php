@@ -11,7 +11,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=MarkRepository::class)
  * @ApiResource(
- *  collectionOperations={"GET", "POST"},
+ *  collectionOperations={
+ *      "GET", 
+ *      "POST",
+ *      "average"={
+ *          "method"="get", 
+ *          "path"="/marks/average",
+ *          "controller"="App\Controller\AverageMarksController"
+ *      }
+ *  },
  *  itemOperations={"GET"},
  *  subresourceOperations={
  *      "api_students_marks_get_subresource"={
