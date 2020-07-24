@@ -16,11 +16,14 @@ use App\Entity\Mark;
  * @ORM\Entity(repositoryClass=StudentRepository::class)
  * @ApiResource(
  *  collectionOperations={"GET", "POST"},
- *  itemOperations={"GET", "DELETE", "PATCH",
+ *  itemOperations={"GET", "DELETE", "PUT",
  *      "average"={
  *          "method"="get", 
  *          "path"="/students/{id}/average",
- *          "controller"="App\Controller\AverageStudentController"
+ *          "controller"="App\Controller\AverageStudentController",
+ *          "openapi_context"={
+ *              "summary"="Calculates the student average"
+ *          }
  *      }
  *  },
  *  normalizationContext={
@@ -76,35 +79,6 @@ class Student
     public function __construct()
     {
         $this->marks = new ArrayCollection();
-    }
-
-    /**
-     * Calculate the average of a student
-     *
-     * @return float
-     * 
-     */
-    public function getSumMarks(): float
-    {
-        return array_reduce($this->marks->toArray(), function ($total, $mark) {
-            return $total + $mark->getValue();
-        }, 0);
-    }
-
-    /**
-     * @return int
-     * 
-     */
-    public function getNumberMarks(): int{
-        return count($this->marks);
-    }
-
-    /**
-     * @return float
-     * @Groups({"students_read"})
-     */
-    public function getAverageStudent(): float{
-        return $this->getSumMarks()/$this->getNumberMarks();
     }
 
     public function getId(): ?int

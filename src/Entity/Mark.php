@@ -17,7 +17,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "average"={
  *          "method"="get", 
  *          "path"="/marks/average",
- *          "controller"="App\Controller\AverageMarksController"
+ *          "controller"="App\Controller\AverageMarksController",
+ *          "deserialize"=false,
+ *          "openapi_context"={
+ *              "summary"="Calculates classroom average"
+ *          }
  *      }
  *  },
  *  itemOperations={"GET"},
@@ -25,10 +29,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "api_students_marks_get_subresource"={
  *          "normalization_context"={"groups"={"marks_subresource"}}
  *      }
- *  },
- *  attributes={
- *      "pagination_enabled"=true, 
- *      "pagination_items_per_page"=10
  *  },
  *  normalizationContext={
  *      "groups"={"marks_read"}

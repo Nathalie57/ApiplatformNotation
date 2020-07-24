@@ -10,11 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AverageMarksController
 {
-    
-    
-    public function __invoke(Mark $data)
+    public function __invoke($data)
     {
+        $numberMarks = count($data);
+        $sumMarks = array_reduce($data, function ($total, $mark) {
+            return $total + $mark->getValue();
+        }, 0);
         
-        dd($data);
+        return $sumMarks/$numberMarks;
     }
 }
