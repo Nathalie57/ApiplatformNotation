@@ -47,6 +47,7 @@ class Student
      * @Groups({"students_read", "marks_read"})
      * @Assert\NotBlank(message="Le prénom de l'élève est obligatoire !")
      * @Assert\Length(min=2, minMessage="Le prénom doit faire au moins deux caractères !")
+     * @Assert\Regex(pattern="/\d/", match=false, message="Le prénom ne peut pas contenir de chiffre !")
      */
     private $firstName;
 
@@ -55,6 +56,7 @@ class Student
      * @Groups({"students_read", "marks_read"})
      * @Assert\NotBlank(message="Le nom de l'élève est obligatoire !")
      * @Assert\Length(min=2, minMessage="Le nom doit faire au moins deux caractères !")
+     * @Assert\Regex(pattern="/\d/", match=false, message="Le nom ne peut pas contenir de chiffre !")
      */
     private $lastName;
 
@@ -63,16 +65,15 @@ class Student
      * @Groups({"students_read", "marks_read"})
      * @Assert\NotBlank(message="Le date de naissance de l'élève est obligatoire !")
      * @Assert\Type(
-     * type = "\DateTime",
-     * message = "La date renseignée doit être au format YYYY-MM-DD !"
-     * )
+        * type = "\DateTime",
+        * message = "La date renseignée doit être au format YYYY-MM-DD !"
+     *  )
      */
     private $birthday;
 
     /**
-     * @ORM\OneToMany(targetEntity=Mark::class, mappedBy="student")
+     * @ORM\OneToMany(targetEntity=Mark::class, mappedBy="student", cascade={"persist", "remove"})
      * @Groups({"students_read"})
-     * @ApiSubresource
      */
     private $marks;
 

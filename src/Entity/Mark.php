@@ -25,11 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      }
  *  },
  *  itemOperations={"GET"},
- *  subresourceOperations={
- *      "api_students_marks_get_subresource"={
- *          "normalization_context"={"groups"={"marks_subresource"}}
- *      }
- *  },
+ *  
  *  normalizationContext={
  *      "groups"={"marks_read"}
  *  }
@@ -42,13 +38,13 @@ class Mark
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"marks_read", "students_read", "marks_subresource"})
+     * @Groups({"marks_read", "students_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"marks_read", "students_read", "marks_subresource"})
+     * @Groups({"marks_read", "students_read"})
      * @Assert\NotBlank(message="La note est obligatoire !")
      * @Assert\Range(min=0, max=20, notInRangeMessage="La note doit être comprise entre 0 et 20 !")
      */
@@ -56,7 +52,7 @@ class Mark
 
     /**
      * @ORM\Column(type="string", length=32)
-     * @Groups({"marks_read", "students_read", "marks_subresource"})
+     * @Groups({"marks_read", "students_read"})
      * @Assert\NotBlank(message="La matière est obligatoire !")
      * @Assert\Length(min=5, minMessage="Le matière doit faire au moins cinq caractères !")
      */
@@ -64,6 +60,11 @@ class Mark
 
     /**
      * @ORM\ManyToOne(targetEntity=Student::class, inversedBy="marks")
+     * @ORM\JoinColumn(
+     *      name="student_id",
+     *      referencedColumnName="id",
+     *      onDelete="CASCADE",
+     *      nullable=false)
      * @Groups({"marks_read"})
      * @Assert\NotBlank(message="L'élève doit obligatoirement être renseigné !")
      */
