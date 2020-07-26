@@ -28,7 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  
  *  normalizationContext={
  *      "groups"={"marks_read"}
- *  }
+ *  },
+ *  denormalizationContext={"disable_type_enforcement"=true}
  * )
  * 
  */
@@ -46,7 +47,7 @@ class Mark
      * @ORM\Column(type="float")
      * @Groups({"marks_read", "students_read"})
      * @Assert\NotBlank(message="La note est obligatoire !")
-     * @Assert\Range(min=0, max=20, notInRangeMessage="La note doit être comprise entre 0 et 20 !")
+     * @Assert\Range(min=0, max=20, invalidMessage="La note doit obligatoirement être un nombre !", notInRangeMessage="La note doit être comprise entre 0 et 20 !")
      */
     private $value;
 
@@ -80,7 +81,7 @@ class Mark
         return $this->value;
     }
 
-    public function setValue(float $value): self
+    public function setValue($value): self
     {
         $this->value = $value;
 

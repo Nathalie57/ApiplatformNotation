@@ -29,7 +29,7 @@ use App\Entity\Mark;
  *  normalizationContext={
  *      "groups"={"students_read"}
  *  },
- * denormalizationContext={"disabled_type_enforcement"=true}
+ * denormalizationContext={"disable_type_enforcement"=true}
  * )
  */
 class Student
@@ -65,9 +65,9 @@ class Student
      * @Groups({"students_read", "marks_read"})
      * @Assert\NotBlank(message="Le date de naissance de l'élève est obligatoire !")
      * @Assert\Type(
-        * type = "\DateTime",
-        * message = "La date renseignée doit être au format YYYY-MM-DD !"
-     *  )
+     *  type = "\DateTime",
+     *  message = "La date renseignée doit être au format YYYY-MM-DD !"
+     * )
      */
     private $birthday;
 
